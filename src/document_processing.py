@@ -1,0 +1,47 @@
+# modules/document_processor.py
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
+
+
+def load_and_split_documents(
+    pdf_path: str,
+    chunk_size: int = 1000,
+    chunk_overlap: int = 200,
+    max_chunks: int | None = None,      # <-- NEW
+    exact: bool = False,                # <-- NEW
+):
+    """
+    Loads a PDF and splits specified pages into text chunks.
+
+    max_chunks : int | None
+        If provided, the function returns **at most** this many chunks
+        (or exactly this many if `exact=True`).
+    exact : bool
+        When True, the list is padded with empty Documents or truncated
+        so that **exactly** `max_chunks` items are returned.
+    """
+    loader = PyPDFLoader(pdf_path)
+    docs = loader.load()
+
+  
+    selected_docs = docs
+
+    text_splitter = CharacterTextSplitter()
+    chunks = text_splitter.split_documents(selected_docs)
+
+    # ---- NEW: limit / pad the output ---------------------------------------
+    if max_chunks is not None:
+        if exact:
+            from langchain_core.documents import Document
+            # Trim or pad with empty Documents
+            if len(chunks) > max_chunks:
+                chunks = chunks[:max_chunks]
+            else:
+                empty = Document(page_content="", metadata={})
+                chunks.extend([empty] * (max_chunks - len(chunks)))
+        else:
+            # simple truncate
+            chunks = chunks[:max_chunks]
+
+    print(f"Returning {len(chunks)} chunks.")
+    return chunks
