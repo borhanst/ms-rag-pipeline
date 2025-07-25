@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from config import settings
-from src.document_processing import load_and_split_documents
+from src.document_processing import load_and_split_documents, load_and_split_txt_documents
 from src.embedding_process import EmbeddingHandler
 from src.llm_chain import create_rag_chain_lcel
 from src.vector_storage import VectorStoreManager
@@ -20,8 +20,8 @@ async def root():
 
 @app.post("/recreate_index")
 async def recreate_index():
-    chunks = load_and_split_documents(
-        settings.PDF_PATH,
+    chunks = load_and_split_txt_documents(
+        settings.TXT_PATH,
         chunk_size=settings.CHUNK_SIZE,
         chunk_overlap=settings.CHUNK_OVERLAP,
         # max_chunks=5
@@ -47,10 +47,9 @@ async def chat(query: str):
     manager = VectorStoreManager(
         emb_handler.embeddings_client, settings.FAISS_INDEX_PATH
     )
-    # if not manager.store_exists():
-    #     manager.create_store_from_documents(chunks)
+
     manager.load_store()
-    retriever = manager.get_retriever(search_kwargs={"k": 10})
+    retriever = manager.get_retriever(search_kwargs={"k": 5})
     data = retriever.invoke(query)
     with open("retriver.txt", "w") as f:
         for d in data:
@@ -129,19 +128,13 @@ def main():
     #     print("No source documents found.")
 
 
-# Optional: Add a function to force re-creation of the index
-def recreate_index():
-    """Function to delete the existing FAISS index and create a new one."""
-    vs_manager = VectorStoreManager(
-        EmbeddingHandler(model_name=settings.EMBEDDING_MODEL).embeddings_client,
-        index_path=settings.FAISS_INDEX_PATH,
-    )
-    vs_manager.delete_store()  # Delete old index
-    # Re-run main to create new index (or call relevant parts)
-    # For simplicity, we'll just print a message here.
-    # You could call main() or the creation logic directly.
-    print("Index deleted. Please run main() again to create a new one.")
+
+    
+
+
+
 
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host="0.0.0.0", port=8001, reload=True)
+

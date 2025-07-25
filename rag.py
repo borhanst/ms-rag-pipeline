@@ -8,11 +8,22 @@ app = marimo.App(width="medium")
 def _():
     import os
     from config import settings
-    from src.document_processing import load_and_split_documents
+    from src.document_processing import load_and_split_documents, load_and_split_txt_documents
     from src.embedding_process import EmbeddingHandler
     from src.vector_storage import VectorStoreManager
     from src.llm_chain import create_rag_chain_lcel, invoke_rag_chain
-    return EmbeddingHandler, VectorStoreManager, settings
+    return (
+        EmbeddingHandler,
+        VectorStoreManager,
+        load_and_split_txt_documents,
+        settings,
+    )
+
+
+@app.cell
+def _(load_and_split_txt_documents, settings):
+    load_and_split_txt_documents(settings.TXT_PATH, chunk_overlap=100, chunk_size=2000)
+    return
 
 
 @app.cell

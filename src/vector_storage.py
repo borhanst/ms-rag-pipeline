@@ -106,3 +106,14 @@ class VectorStoreManager:
     def store_exists(self) -> bool:
         """True if a FAISS index already exists on disk."""
         return os.path.isfile(os.path.join(self.index_path, "index.faiss"))
+    
+    
+    # Optional: Add a function to force re-creation of the index
+    def recreate_index(self):
+        """Function to delete the existing FAISS index and create a new one."""
+        self.delete_store()  # Delete old index
+        # Re-run main to create new index (or call relevant parts)
+        # For simplicity, we'll just print a message here.
+        # You could call main() or the creation logic directly.
+        print("Index deleted. Please run main() again to create a new one.")
+        self.load_store()

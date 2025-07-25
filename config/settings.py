@@ -21,6 +21,8 @@ BASE_PATH = Path(__file__).resolve().parent.parent
 # File Paths
 PDF_PATH = BASE_PATH / "data/HSC26-Bangla1st-Paper.pdf" # Or pass as argument
 
+TXT_PATH = BASE_PATH / "data/HSC26-Bangla1st-Paper.txt" # Or pass as argument
+
 
 # FAISS_INDEX_PATH = "data/faiss_index"
 FAISS_INDEX_PATH = "data/multi/faiss_index"
