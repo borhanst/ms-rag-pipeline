@@ -121,34 +121,35 @@ Once I had the cleaned text file, I used it as the source for chunking and vecto
 
 
 **2. What chunking strategy did you choose (e.g. paragraph-based, sentence-based, character limit)? Why do you think it works well for semantic retrieval?**  
+
 I used a character-based chunking strategy with a 1000-character limit and 200-character overlap. This ensures each chunk has enough context while preserving continuity between chunks. The overlap helps maintain semantic meaning, especially in Bangla text where sentence boundaries can be inconsistent. This strategy strikes a good balance between chunk size and relevance, improving retrieval accuracy.
 
 **3. What embedding model did you use? Why did you choose it? How does it capture the meaning of the text?**  
+
 I used OpenAI’s text-embedding-3-large model because it provides high-quality multilingual embeddings, including strong support for Bangla and English. It handles long inputs (up to 8,192 tokens) and is optimized for semantic search.
 
 The model captures meaning by converting text into dense vectors using deep transformer layers and contrastive learning, ensuring that semantically similar texts (like a Bangla question and its answer) are placed close together in vector space. This allows accurate and context-aware retrieval, even when exact words differ
 
-**4. How are you comparing the query with your stored chunks? Why did you choose this similarity method and storage setup?**  
+**4. How are you comparing the query with your stored chunks? Why did you choose this similarity method and storage setup?** 
+
 I compare the user query with stored chunks using cosine similarity between their embeddings. I chose this method because it's widely used for measuring semantic closeness in vector space.
 
 For storage, I used FAISS, a fast and efficient vector database that supports similarity search at scale. It’s lightweight, easy to integrate, and performs well for local setups.
 
 **5. How do you ensure that the question and the document chunks are compared meaningfully? What would happen if the query is vague or missing context?**  
+
 To ensure meaningful comparison, I use the same embedding model (text-embedding-3-large) for both the user query and document chunks, so they exist in the same semantic space. I also apply cleaning and normalization during preprocessing to improve consistency.
 
 **6. Do the results seem relevant? If not, what might improve them (e.g. better chunking, better embedding model, larger document)?**  
+
 Currently, the system returns approximately 50% relevant answers. While it performs reasonably on direct questions, it struggles with vague or context-heavy queries.
 
 To improve relevance, I plan to:
 
 1. Refine the chunking strategy (e.g., smaller chunks with overlap) to better preserve context
-
 2. Improve PDF preprocessing to reduce noise and formatting issues
-
 3. Try alternative or fine-tuned embedding models for Bangla-specific understanding
-
 4. Add reranking or filtering to prioritize higher-confidence results
-
 5. Include metadata like page numbers or chapter headers to improve grounding
 
 These adjustments should help increase accuracy and improve the overall user experience.
