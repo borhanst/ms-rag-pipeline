@@ -8,7 +8,7 @@ load_dotenv()
 # API Keys
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # Model Configurations
-EMBEDDING_MODEL = "models/gemini-embedding-001"
+EMBEDDING_MODEL = "text-embedding-3-large"
 # CHAT_MODEL = "gemini-2.5-flash" # Note: Check the correct model identifier
 CHAT_MODEL = "gpt-4.1-2025-04-14"
 # Document Processing

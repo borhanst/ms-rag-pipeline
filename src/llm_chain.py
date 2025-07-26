@@ -5,8 +5,16 @@ from langchain.schema.output_parser import StrOutputParser
 from langchain_openai import ChatOpenAI
 
 
-def create_rag_chain_lcel(retriever, chat_model_name="gpt-3.5-turbo", temperature=0.0):
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=temperature)
+def create_rag_chain_lcel(
+    retriever, chat_model_name="gpt-3.5-turbo", temperature=0.0, history=None
+):
+    llm = ChatOpenAI(model=chat_model_name, temperature=temperature)
+
+    # Format chat history for prompt
+    if history:
+        formatted_history = "\n".join([f"User: {q}" for q in history])
+    else:
+        formatted_history = ""
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -17,7 +25,7 @@ def create_rag_chain_lcel(retriever, chat_model_name="gpt-3.5-turbo", temperatur
                 - আপনি কখনো নিজে থেকে কিছু উদ্ভাবন করবেন না, শুধু Context‑এর তথ্য উপস্থাপন করবেন।
                 - উত্তর সংক্ষিপ্ত ও পরিষ্কার হবে।""",
             ),
-            ("placeholder", "{chat_history}"),
+            ("placeholder", formatted_history),
             ("human", "Context:\n{context}\n\nপ্রশ্ন:\n{question}"),
         ]
     )

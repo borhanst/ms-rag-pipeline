@@ -1,11 +1,12 @@
-langchain>=0.2.0
-langchain-google-genai>=1.0.0 # Ensure you have a recent version
-langchain-community>=0.2.0
-pypdf
-python-dotenv
-tenacity
-faiss-cpu # Or faiss-gpu
-# Pin the google-generativeai version explicitly
-google-generativeai>=0.5.0 # Or check for the latest stable version
-# Potentially update protobuf if needed (sometimes downgrading works)
-# protobuf>=4.21.0 # Try different versions if the error persists
+fastapi==0.104.1
+uvicorn==0.24.0
+langchain==0.0.339
+faiss-cpu==1.7.4
+sentence-transformers==2.2.2
+pypdf2==3.0.1
+python-dotenv==1.0.0
+pydantic==2.4.2
+numpy==1.24.3
+pandas==2.0.3
+torch==2.1.1
+transformers==4.35.2

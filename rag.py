@@ -6,12 +6,11 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    import os
     from config import settings
-    from src.document_processing import load_and_split_documents, load_and_split_txt_documents
+    from src.document_processing import load_and_split_txt_documents
     from src.embedding_process import EmbeddingHandler
     from src.vector_storage import VectorStoreManager
-    from src.llm_chain import create_rag_chain_lcel, invoke_rag_chain
+
     return (
         EmbeddingHandler,
         VectorStoreManager,
@@ -22,7 +21,9 @@ def _():
 
 @app.cell
 def _(load_and_split_txt_documents, settings):
-    load_and_split_txt_documents(settings.TXT_PATH, chunk_overlap=100, chunk_size=2000)
+    load_and_split_txt_documents(
+        settings.TXT_PATH, chunk_overlap=100, chunk_size=2000
+    )
     return
 
 
@@ -34,7 +35,9 @@ def _(EmbeddingHandler, settings):
 
 @app.cell
 def _(VectorStoreManager, chunks, emb_handler, settings):
-    manager = VectorStoreManager(emb_handler.embeddings_client, settings.FAISS_INDEX_PATH)
+    manager = VectorStoreManager(
+        emb_handler.embeddings_client, settings.FAISS_INDEX_PATH
+    )
     if not manager.store_exists():
         manager.create_store_from_documents(chunks)
     manager.load_store()
