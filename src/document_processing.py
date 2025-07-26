@@ -1,3 +1,4 @@
+from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from bangla_pdf_ocr import process_pdf
@@ -55,11 +56,11 @@ def load_and_split_documents(
 
 
 def load_and_split_txt_documents(
-    txt_path: str,
+    txt_path: Path | str,
     chunk_size: int = 1000,
     chunk_overlap: int = 200,
-    max_chunks: int | None = None,      # <-- NEW
-    exact: bool = False,                # <-- NEW
+    max_chunks: int | None = None,
+    exact: bool = False,
 ):
     """
     Loads a PDF and splits specified pages into text chunks.
